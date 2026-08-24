@@ -69,6 +69,67 @@ export default function AuthGate({
   const pathname =
     usePathname();
 
+  // ============================================
+  // NORMALISASI ROUTE GITHUB PAGES
+  // ============================================
+
+  const routePath = (() => {
+    let value =
+      pathname || "/";
+
+    const basePath =
+      process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+    // Contoh:
+    // /waste-monitoring-dreamwear/pic/
+    // menjadi:
+    // /pic/
+    if (
+      basePath &&
+      (
+        value === basePath ||
+        value.startsWith(
+          `${basePath}/`,
+        )
+      )
+    ) {
+      value =
+        value.slice(
+          basePath.length,
+        ) || "/";
+    }
+
+    // Fallback khusus GitHub Pages repository ini
+    const githubBase =
+      "/waste-monitoring-dreamwear";
+
+    if (
+      value === githubBase ||
+      value.startsWith(
+        `${githubBase}/`,
+      )
+    ) {
+      value =
+        value.slice(
+          githubBase.length,
+        ) || "/";
+    }
+
+    // /pic/ menjadi /pic
+    if (
+      value.length > 1
+    ) {
+      value =
+        value.replace(
+          /\/+$/,
+          "",
+        );
+    }
+
+    return value || "/";
+  })();
+
+
   const router =
     useRouter();
 
@@ -265,19 +326,19 @@ export default function AuthGate({
       profile.role ===
       "PIC"
     ) {
-      const allowed =
+const allowed =
         PIC_ALLOWED_PATHS.some(
           (path) => {
             if (
               path === "/pic"
             ) {
               return (
-                pathname ===
+                routePath ===
                 "/pic"
               );
             }
 
-            return pathname.startsWith(
+            return routePath.startsWith(
               path,
             );
           },
@@ -297,7 +358,7 @@ export default function AuthGate({
     if (
       profile.role ===
         "ADMIN" &&
-      pathname === "/pic"
+      routePath === "/pic"
     ) {
       setRedirecting(true);
 
@@ -309,7 +370,7 @@ export default function AuthGate({
     setRedirecting(false);
   }, [
     profile,
-    pathname,
+    routePath,
     router,
   ]);
 
