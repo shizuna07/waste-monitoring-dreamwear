@@ -9,6 +9,7 @@ import AuthGate from "@/components/AuthGate";
 import AppNavigation from "@/components/AppNavigation";
 import PWARegister from "@/components/PWARegister";
 import ThemeToggle from "@/components/ThemeToggle";
+import SidebarNotificationBell from "@/components/SidebarNotificationBell";
 
 const basePath =
   process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -88,8 +89,10 @@ export default function RootLayout({
 
         <ThemeToggle />
 
+
         <AuthGate>
           <AppNavigation />
+          <SidebarNotificationBell />
 
           <div className="min-h-screen pb-24 md:pb-0 md:pl-64">
             {children}

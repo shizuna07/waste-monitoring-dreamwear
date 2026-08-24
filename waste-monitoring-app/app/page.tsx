@@ -1,5 +1,7 @@
 "use client";
 
+import DashboardWasteCharts from "@/components/DashboardWasteCharts";
+
 import Link from "next/link";
 import {
   useCallback,
@@ -451,100 +453,332 @@ export default function Home() {
         {!loading &&
           !errorMessage && (
             <>
-              <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div className="rounded-2xl bg-blue-600 p-5 text-white shadow-sm">
-                  <p className="text-sm font-medium text-blue-100">
-                    Limbah Hari Ini
-                  </p>
+              <section className="mt-6">
 
-                  <div className="mt-3 flex items-end gap-2">
-                    <p className="text-3xl font-black">
-                      {formatKg(
-                        totalToday,
-                      )}
-                    </p>
+          <div className="mb-4">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600">
+              Ringkasan Hari Ini
+            </p>
 
-                    <p className="pb-1 text-sm font-bold">
-                      KG
-                    </p>
-                  </div>
+            <h2 className="mt-1 text-xl font-black text-slate-900">
+              Limbah Hari Ini
+            </h2>
+          </div>
 
-                  <p className="mt-2 text-xs text-blue-100">
-                    {todayRecords.length >
-                    0
-                      ? "Sudah ada pencatatan hari ini"
-                      : "Belum ada pencatatan hari ini"}
-                  </p>
-                </div>
 
-                <div className="rounded-2xl bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">
-                    Total Bulan Ini
-                  </p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-                  <div className="mt-3 flex items-end gap-2">
-                    <p className="text-3xl font-black text-slate-900">
-                      {formatKg(
-                        totalMonth,
-                      )}
-                    </p>
+            {/* CUTTING */}
 
-                    <p className="pb-1 text-sm font-bold text-slate-400">
-                      KG
-                    </p>
-                  </div>
+            <div className="rounded-2xl bg-blue-600 p-5 text-white shadow-sm">
 
-                  <p className="mt-2 text-xs text-slate-400">
-                    {
-                      monthRecords.length
-                    }{" "}
-                    hari pencatatan
-                  </p>
-                </div>
+              <div className="flex items-start justify-between">
 
-                <div className="rounded-2xl bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">
-                    Total Tahun Ini
-                  </p>
-
-                  <div className="mt-3 flex items-end gap-2">
-                    <p className="text-3xl font-black text-slate-900">
-                      {formatKg(
-                        totalYear,
-                      )}
-                    </p>
-
-                    <p className="pb-1 text-sm font-bold text-slate-400">
-                      KG
-                    </p>
-                  </div>
-
-                  <p className="mt-2 text-xs text-slate-400">
-                    Tahun{" "}
-                    {currentYear}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-slate-900 p-5 text-white shadow-sm">
-                  <p className="text-sm text-slate-300">
-                    Total Pencatatan
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wider text-blue-100">
+                    Limbah Cutting
                   </p>
 
                   <p className="mt-3 text-3xl font-black">
-                    {
-                      records.length
-                    }
+                    {todayRecords
+                      .reduce(
+                        (total, item) =>
+                          total +
+                          Number(
+                            item.cutting_kg ??
+                              0,
+                          ),
+                        0,
+                      )
+                      .toLocaleString(
+                        "id-ID",
+                        {
+                          maximumFractionDigits:
+                            2,
+                        },
+                      )}
+                    <span className="ml-2 text-sm font-black text-blue-100">
+                      KG
+                    </span>
+                  </p>
+
+                  <p className="mt-2 text-xs text-blue-100">
+                    Bahan Cutting • Hari ini
+                  </p>
+                </div>
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl">
+                  ✂
+                </div>
+              </div>
+            </div>
+
+
+            {/* BASAH */}
+
+            <div className="rounded-2xl bg-cyan-600 p-5 text-white shadow-sm">
+
+              <div className="flex items-start justify-between">
+
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wider text-cyan-100">
+                    Limbah Basah / Umum
+                  </p>
+
+                  <p className="mt-3 text-3xl font-black">
+                    {todayRecords
+                      .reduce(
+                        (total, item) =>
+                          total +
+                          Number(
+                            item.wet_waste_kg ??
+                              0,
+                          ),
+                        0,
+                      )
+                      .toLocaleString(
+                        "id-ID",
+                        {
+                          maximumFractionDigits:
+                            2,
+                        },
+                      )}
+                    <span className="ml-2 text-sm font-black text-cyan-100">
+                      KG
+                    </span>
+                  </p>
+
+                  <p className="mt-2 text-xs text-cyan-100">
+                    Limbah Basah / Umum • Hari ini
+                  </p>
+                </div>
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl">
+                  ◉
+                </div>
+              </div>
+            </div>
+
+
+            {/* LIMBAH LAINNYA */}
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
+              <div className="flex items-start justify-between">
+
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wider text-slate-500">
+                    Limbah Lainnya
+                  </p>
+
+                  <p className="mt-3 text-3xl font-black text-slate-900">
+                    {todayRecords
+                      .reduce(
+                        (total, item) =>
+                          total +
+                          Number(
+                            item.plastic_kg ??
+                              0,
+                          ) +
+                          Number(
+                            item.paper_kg ??
+                              0,
+                          ) +
+                          Number(
+                            item.carton_kg ??
+                              0,
+                          ) +
+                          Number(
+                            item.pedding_kg ??
+                              0,
+                          ),
+                        0,
+                      )
+                      .toLocaleString(
+                        "id-ID",
+                        {
+                          maximumFractionDigits:
+                            2,
+                        },
+                      )}
+                    <span className="ml-2 text-sm font-black text-slate-400">
+                      KG
+                    </span>
+                  </p>
+
+                  <p className="mt-2 text-xs text-slate-500">
+                    Plastik + Paper + Karton + Pedding
+                  </p>
+                </div>
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-xl">
+                  ♻
+                </div>
+              </div>
+            </div>
+
+
+            {/* TOTAL */}
+
+            <div className="rounded-2xl bg-slate-900 p-5 text-white shadow-sm">
+
+              <div className="flex items-start justify-between">
+
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wider text-slate-300">
+                    Total Hari Ini
+                  </p>
+
+                  <p className="mt-3 text-3xl font-black">
+                    {todayRecords
+                      .reduce(
+                        (total, item) =>
+                          total +
+                          Number(
+                            item.total_kg ??
+                              0,
+                          ),
+                        0,
+                      )
+                      .toLocaleString(
+                        "id-ID",
+                        {
+                          maximumFractionDigits:
+                            2,
+                        },
+                      )}
+                    <span className="ml-2 text-sm font-black text-slate-300">
+                      KG
+                    </span>
                   </p>
 
                   <p className="mt-2 text-xs text-slate-400">
-                    Hari tersimpan di database
+                    Seluruh jenis limbah hari ini
                   </p>
                 </div>
-              </section>
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-xl">
+                  ∑
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
 
               <TodayCleanlinessStatus />
 
-              <AdminDailyMonitoring />
+        <section className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
+
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600">
+              Statistik
+            </p>
+
+            <h2 className="mt-1 text-xl font-black text-slate-900">
+              Ringkasan Periode
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Total pencatatan berdasarkan periode.
+            </p>
+          </div>
+
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+
+            <div className="rounded-xl bg-slate-50 p-4">
+
+              <p className="text-xs font-bold text-slate-500">
+                Total Bulan Ini
+              </p>
+
+              <p className="mt-2 text-2xl font-black text-slate-900">
+                {monthRecords
+                  .reduce(
+                    (total, item) =>
+                      total +
+                      Number(
+                        item.total_kg ??
+                          0,
+                      ),
+                    0,
+                  )
+                  .toLocaleString(
+                    "id-ID",
+                    {
+                      maximumFractionDigits:
+                        2,
+                    },
+                  )}
+                <span className="ml-1 text-xs text-slate-400">
+                  KG
+                </span>
+              </p>
+
+              <p className="mt-1 text-xs text-slate-400">
+                {monthRecords.length} hari pencatatan
+              </p>
+            </div>
+
+
+            <div className="rounded-xl bg-slate-50 p-4">
+
+              <p className="text-xs font-bold text-slate-500">
+                Total Tahun Ini
+              </p>
+
+              <p className="mt-2 text-2xl font-black text-slate-900">
+                {yearRecords
+                  .reduce(
+                    (total, item) =>
+                      total +
+                      Number(
+                        item.total_kg ??
+                          0,
+                      ),
+                    0,
+                  )
+                  .toLocaleString(
+                    "id-ID",
+                    {
+                      maximumFractionDigits:
+                        2,
+                    },
+                  )}
+                <span className="ml-1 text-xs text-slate-400">
+                  KG
+                </span>
+              </p>
+
+              <p className="mt-1 text-xs text-slate-400">
+                Akumulasi tahun berjalan
+              </p>
+            </div>
+
+
+            <div className="rounded-xl bg-slate-900 p-4 text-white">
+
+              <p className="text-xs font-bold text-slate-300">
+                Total Pencatatan
+              </p>
+
+              <p className="mt-2 text-2xl font-black">
+                {records.length}
+              </p>
+
+              <p className="mt-1 text-xs text-slate-400">
+                Hari tersimpan di database
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+
+              <DashboardWasteCharts />
+
+        <AdminDailyMonitoring />
 
       <MonthlyTargetOverview />
 

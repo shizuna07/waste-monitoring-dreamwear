@@ -7,6 +7,12 @@ import {
 } from "react";
 
 import { useAuth } from "@/components/AuthGate";
+import { addPhotoWatermark } from "@/lib/addPhotoWatermark";
+
+import {
+  compressImage,
+  formatFileSize,
+} from "@/lib/compressImage";
 import { supabase } from "@/lib/supabase";
 
 type TodayRecord = {
@@ -214,18 +220,56 @@ export default function CleanlinessPage() {
 
       newPath =
         `${userId}/${record.record_date}/${crypto.randomUUID()}.${extension}`;
+      setMessage(
+        "Mengompres foto..."
+      );
 
-      const {
+      const compression =
+        await compressImage(
+          photo,
+        );
+
+      const uploadFile =
+        compression.file;
+
+      console.log(
+        "Ukuran foto:",
+        formatFileSize(
+          compression.originalSize,
+        ),
+        "→",
+        formatFileSize(
+          compression.compressedSize,
+        ),
+      );
+
+      setMessage(
+        "Menambahkan watermark..."
+      );
+
+      const watermarkedFile =
+        await addPhotoWatermark(
+          uploadFile,
+          {
+            picName:
+              profile.name,
+
+            recordDate:
+              record.record_date,
+          },
+        );
+
+const {
         error:
           uploadError,
       } =
-        await supabase.storage
+await supabase.storage
           .from(
             "waste-evidence",
           )
           .upload(
             newPath,
-            photo,
+            watermarkedFile,
             {
               cacheControl:
                 "3600",
