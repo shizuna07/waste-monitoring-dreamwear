@@ -445,7 +445,7 @@ export default function InputWastePage() {
                         className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-14 text-lg font-bold"
                       />
 
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400">
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-600">
                         KG
                       </span>
                     </div>
@@ -564,7 +564,7 @@ export default function InputWastePage() {
             disabled={
               saving
             }
-            className="w-full rounded-2xl bg-slate-900 px-6 py-4 text-lg font-black text-white disabled:opacity-50"
+            className="w-full rounded-2xl bg-slate-900 px-6 py-4 text-lg font-black text-white disabled:opacity-100"
           >
             {saving
               ? "Menyimpan..."
