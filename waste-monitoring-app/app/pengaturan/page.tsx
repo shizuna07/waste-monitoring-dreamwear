@@ -1,5 +1,7 @@
 "use client";
 
+import WorkCalendarGenerator from "@/components/WorkCalendarGenerator";
+
 import WorkCalendarSettings from "@/components/WorkCalendarSettings";
 
 import UserManagement from "@/components/UserManagement";
@@ -234,6 +236,8 @@ export default function SettingsPage() {
             </div>
           )}
         </section>
+        <WorkCalendarGenerator />
+
         <MonthlyTargetSettings />
       </div>
     

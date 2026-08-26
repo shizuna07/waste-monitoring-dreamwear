@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { useAuth } from "@/components/AuthGate";
+import { useTodayWorkStatus } from "@/components/useTodayWorkStatus";
 import { addPhotoWatermark } from "@/lib/addPhotoWatermark";
 
 import {
@@ -60,6 +61,28 @@ function formatTime(
 }
 
 export default function CleanlinessPage() {
+
+  const {
+    loading:
+      workLockLoading,
+
+    errorMessage:
+      workLockError,
+
+    isWorkday:
+      workLockIsWorkday,
+
+    statusLabel:
+      workLockStatusLabel,
+
+    note:
+      workLockNote,
+
+    holiday:
+      workLockHoliday,
+  } =
+    useTodayWorkStatus();
+
   const {
     userId,
     profile,
@@ -349,6 +372,132 @@ await supabase.storage
 
     setSaving(false);
   }
+
+
+  // PIC_WORKDAY_LOCK_KEBERSIHAN
+
+  if (
+    profile.role === "PIC" &&
+    workLockLoading
+  ) {
+    return (
+      <main className="min-h-screen bg-slate-100 px-4 py-8">
+        <div className="mx-auto max-w-2xl rounded-3xl bg-white p-8 text-center shadow-sm">
+
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl">
+            ◌
+          </div>
+
+          <p className="mt-4 font-black text-slate-800">
+            Memeriksa Jadwal Kerja...
+          </p>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Sistem sedang memeriksa status operasional hari ini.
+          </p>
+
+        </div>
+      </main>
+    );
+  }
+
+
+  if (
+    profile.role === "PIC" &&
+    workLockError
+  ) {
+    return (
+      <main className="min-h-screen bg-slate-100 px-4 py-8">
+        <div className="mx-auto max-w-2xl rounded-3xl border border-red-200 bg-white p-8 text-center shadow-sm">
+
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-2xl">
+            !
+          </div>
+
+          <h1 className="mt-4 text-xl font-black text-slate-900">
+            Jadwal Tidak Dapat Diverifikasi
+          </h1>
+
+          <p className="mt-2 text-sm text-red-600">
+            {workLockError}
+          </p>
+
+          <p className="mt-4 text-sm text-slate-500">
+            Untuk keamanan data, akses PIC sementara dinonaktifkan.
+          </p>
+
+        </div>
+      </main>
+    );
+  }
+
+
+  if (
+    profile.role === "PIC" &&
+    !workLockIsWorkday
+  ) {
+    return (
+      <main className="min-h-screen bg-slate-100 px-4 py-8">
+
+        <div className="mx-auto max-w-2xl">
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-3xl">
+              ○
+            </div>
+
+            <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+              Status Operasional
+            </p>
+
+            <h1 className="mt-2 text-3xl font-black text-slate-900">
+              {workLockStatusLabel}
+            </h1>
+
+            {workLockHoliday && (
+              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+
+                <p className="text-xs font-black uppercase text-red-600">
+                  🔴 Libur Nasional
+                </p>
+
+                <p className="mt-1 text-sm font-black text-red-700">
+                  {workLockHoliday.holiday_name}
+                </p>
+
+              </div>
+            )}
+
+            {workLockNote && (
+              <p className="mt-4 text-sm font-semibold text-slate-600">
+                {workLockNote}
+              </p>
+            )}
+
+            <div className="mt-6 rounded-2xl bg-blue-50 p-5">
+
+              <p className="font-black text-blue-700">
+                Akses PIC Dinonaktifkan
+              </p>
+
+              <p className="mt-1 text-sm text-slate-600">
+                Upload bukti kebersihan dinonaktifkan pada hari libur.
+              </p>
+
+              <p className="mt-2 text-xs text-slate-500">
+                Status mengikuti Kalender Kerja PT.DREAMWEAR.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+    );
+  }
+
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-6 sm:p-8">

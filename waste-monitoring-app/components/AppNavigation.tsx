@@ -54,6 +54,11 @@ const ADMIN_MENUS = [
     icon: "▤",
   },
   {
+    label: "Notifikasi",
+    href: "/notifikasi",
+    icon: "🔔",
+  },
+  {
     label: "Aktivitas",
     href: "/aktivitas",
     icon: "◉",

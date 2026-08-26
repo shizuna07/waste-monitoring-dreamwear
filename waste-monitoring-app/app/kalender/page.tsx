@@ -36,6 +36,15 @@ type WasteRecord = {
   cleanliness_uploaded_by: string | null;
 };
 
+
+type HolidayRow = {
+  holiday_date: string;
+  holiday_name: string;
+  holiday_type:
+    | "NATIONAL"
+    | "COLLECTIVE_LEAVE";
+};
+
 type WorkCalendarRow = {
   work_date: string;
   is_workday: boolean;
@@ -326,6 +335,14 @@ export default function CalendarMonitoringPage() {
     >([]);
 
   const [
+    holidays,
+    setHolidays,
+  ] =
+    useState<
+      HolidayRow[]
+    >([]);
+
+  const [
     userNames,
     setUserNames,
   ] =
@@ -353,6 +370,34 @@ export default function CalendarMonitoringPage() {
     setSelectedDate,
   ] =
     useState("");
+
+  const [
+    overrideWorkday,
+    setOverrideWorkday,
+  ] = useState<boolean | null>(
+    null,
+  );
+
+  const [
+    overrideNote,
+    setOverrideNote,
+  ] = useState("");
+
+  const [
+    savingOverride,
+    setSavingOverride,
+  ] = useState(false);
+
+  const [
+    overrideMessage,
+    setOverrideMessage,
+  ] = useState("");
+
+  const [
+    overrideError,
+    setOverrideError,
+  ] = useState("");
+
 
   const [
     photoUrl,
@@ -395,6 +440,7 @@ export default function CalendarMonitoringPage() {
         const [
           wasteResult,
           scheduleResult,
+          holidayResult,
         ] =
           await Promise.all([
             supabase
@@ -453,6 +499,27 @@ export default function CalendarMonitoringPage() {
               .order(
                 "work_date",
               ),
+
+            supabase
+              .from(
+                "indonesia_holidays",
+              )
+              .select(`
+                holiday_date,
+                holiday_name,
+                holiday_type
+              `)
+              .gte(
+                "holiday_date",
+                start,
+              )
+              .lt(
+                "holiday_date",
+                end,
+              )
+              .order(
+                "holiday_date",
+              ),
           ]);
 
         if (
@@ -487,6 +554,22 @@ export default function CalendarMonitoringPage() {
           return;
         }
 
+        if (
+          holidayResult.error
+        ) {
+          setErrorMessage(
+            holidayResult
+              .error
+              .message,
+          );
+
+          setLoading(
+            false,
+          );
+
+          return;
+        }
+
         const wasteRows =
           (
             wasteResult
@@ -507,6 +590,13 @@ export default function CalendarMonitoringPage() {
 
         setSchedules(
           calendarRows,
+        );
+
+        setHolidays(
+          (
+            holidayResult.data ??
+            []
+          ) as HolidayRow[],
         );
 
         const ids =
@@ -619,6 +709,26 @@ export default function CalendarMonitoringPage() {
       return map;
     }, [records]);
 
+  const holidayMap =
+    useMemo(() => {
+      const map =
+        new Map<
+          string,
+          HolidayRow
+        >();
+
+      holidays.forEach(
+        (holiday) => {
+          map.set(
+            holiday.holiday_date,
+            holiday,
+          );
+        },
+      );
+
+      return map;
+    }, [holidays]);
+
   const scheduleMap =
     useMemo(() => {
       const map =
@@ -714,6 +824,11 @@ export default function CalendarMonitoringPage() {
         date,
       );
 
+    const holiday =
+      holidayMap.get(
+        date,
+      );
+
     const now =
       jakartaNow();
 
@@ -733,16 +848,42 @@ export default function CalendarMonitoringPage() {
       };
     }
 
+    if (
+      !schedule &&
+      holiday?.holiday_type ===
+        "NATIONAL"
+    ) {
+      return {
+        code:
+          "NATIONAL_HOLIDAY",
+        label:
+          "Libur Nasional",
+        symbol:
+          "●",
+        className:
+          "border-red-200 bg-red-50 text-red-700",
+      };
+    }
+
     if (!schedule) {
       return {
         code:
           "UNSET",
         label:
-          "Belum Diatur",
+          holiday?.holiday_type ===
+            "COLLECTIVE_LEAVE"
+            ? "Cuti Bersama"
+            : "Belum Diatur",
         symbol:
-          "◌",
+          holiday?.holiday_type ===
+            "COLLECTIVE_LEAVE"
+            ? "●"
+            : "◌",
         className:
-          "border-amber-200 bg-amber-50 text-amber-700",
+          holiday?.holiday_type ===
+            "COLLECTIVE_LEAVE"
+            ? "border-amber-300 bg-amber-50 text-amber-700"
+            : "border-amber-200 bg-amber-50 text-amber-700",
       };
     }
 
@@ -866,6 +1007,20 @@ export default function CalendarMonitoringPage() {
             date,
           );
 
+        const holiday =
+          holidayMap.get(
+            date,
+          );
+
+        if (
+          !schedule &&
+          holiday?.holiday_type ===
+            "NATIONAL"
+        ) {
+          holidays += 1;
+          continue;
+        }
+
         if (!schedule) {
           unconfigured +=
             1;
@@ -940,6 +1095,7 @@ export default function CalendarMonitoringPage() {
       selectedMonth,
       monthInfo,
       scheduleMap,
+      holidayMap,
       recordMap,
       current.date,
     ]);
@@ -973,6 +1129,133 @@ export default function CalendarMonitoringPage() {
         ) ??
         null
       : null;
+
+  const selectedHoliday =
+    selectedDate
+      ? holidayMap.get(
+          selectedDate,
+        ) ??
+        null
+      : null;
+
+  // ============================================
+  // FORM OVERRIDE KALENDER
+  // ============================================
+
+  useEffect(() => {
+    if (!selectedDate) {
+      setOverrideWorkday(null);
+      setOverrideNote("");
+      setOverrideMessage("");
+      setOverrideError("");
+      return;
+    }
+
+    if (selectedSchedule) {
+      setOverrideWorkday(
+        selectedSchedule.is_workday,
+      );
+
+      setOverrideNote(
+        selectedSchedule.note ?? "",
+      );
+    } else if (
+      selectedHoliday?.holiday_type ===
+      "NATIONAL"
+    ) {
+      setOverrideWorkday(false);
+
+      setOverrideNote(
+        `Libur Nasional - ${selectedHoliday.holiday_name}`,
+      );
+    } else {
+      setOverrideWorkday(null);
+      setOverrideNote("");
+    }
+
+    setOverrideMessage("");
+    setOverrideError("");
+  }, [
+    selectedDate,
+    selectedSchedule?.is_workday,
+    selectedSchedule?.note,
+    selectedHoliday?.holiday_type,
+    selectedHoliday?.holiday_name,
+  ]);
+
+
+  async function saveScheduleOverride() {
+    if (!selectedDate) {
+      return;
+    }
+
+    if (
+      overrideWorkday === null
+    ) {
+      setOverrideError(
+        "Pilih Hari Kerja atau Libur.",
+      );
+
+      return;
+    }
+
+    setSavingOverride(true);
+    setOverrideError("");
+    setOverrideMessage("");
+
+    try {
+      const defaultNote =
+        overrideWorkday
+          ? "Hari Kerja"
+          : "Libur Perusahaan";
+
+      const {
+        error,
+      } =
+        await supabase
+          .from(
+            "work_calendar",
+          )
+          .upsert(
+            {
+              work_date:
+                selectedDate,
+
+              is_workday:
+                overrideWorkday,
+
+              note:
+                overrideNote.trim() ||
+                defaultNote,
+            },
+            {
+              onConflict:
+                "work_date",
+            },
+          );
+
+      if (error) {
+        throw error;
+      }
+
+      setOverrideMessage(
+        overrideWorkday
+          ? "✅ Berhasil dijadikan HARI KERJA."
+          : "✅ Berhasil dijadikan LIBUR.",
+      );
+
+      await loadData();
+    } catch (error) {
+      setOverrideError(
+        error instanceof Error
+          ? error.message
+          : "Gagal menyimpan jadwal.",
+      );
+    } finally {
+      setSavingOverride(false);
+    }
+  }
+
 
   const selectedStatus =
     selectedDate
@@ -1324,6 +1607,11 @@ export default function CalendarMonitoringPage() {
                         date,
                       );
 
+                    const holiday =
+                      holidayMap.get(
+                        date,
+                      );
+
                     const status =
                       getStatus(
                         date,
@@ -1365,10 +1653,19 @@ export default function CalendarMonitoringPage() {
 
                         <div className="flex items-start justify-between">
 
-                          <span className="text-sm font-black sm:text-lg">
-                            {
-                              day
-                            }
+                          <span
+                            className={[
+                              "text-sm font-black sm:text-lg",
+                              holiday?.holiday_type ===
+                                "NATIONAL"
+                                ? "text-red-600"
+                                : holiday?.holiday_type ===
+                                    "COLLECTIVE_LEAVE"
+                                  ? "text-amber-600"
+                                  : "",
+                            ].join(" ")}
+                          >
+                            {day}
                           </span>
 
                           {status.symbol && (
@@ -1395,6 +1692,23 @@ export default function CalendarMonitoringPage() {
                               }
                             </p>
                           )}
+
+                        {holiday && (
+                          <p
+                            className={[
+                              "mt-1 hidden truncate text-[9px] font-bold sm:block",
+                              holiday.holiday_type ===
+                                "NATIONAL"
+                                ? "text-red-600"
+                                : "text-amber-600",
+                            ].join(" ")}
+                            title={
+                              holiday.holiday_name
+                            }
+                          >
+                            {holiday.holiday_name}
+                          </p>
+                        )}
 
                         {record && (
                           <>
@@ -1471,6 +1785,50 @@ export default function CalendarMonitoringPage() {
               </div>
 
 
+              {selectedHoliday && (
+                <div
+                  className={[
+                    "mt-5 rounded-2xl border p-4",
+                    selectedHoliday.holiday_type ===
+                      "NATIONAL"
+                      ? "border-red-200 bg-red-50"
+                      : "border-amber-200 bg-amber-50",
+                  ].join(" ")}
+                >
+                  <p
+                    className={[
+                      "text-xs font-black uppercase tracking-wider",
+                      selectedHoliday.holiday_type ===
+                        "NATIONAL"
+                        ? "text-red-600"
+                        : "text-amber-600",
+                    ].join(" ")}
+                  >
+                    {selectedHoliday.holiday_type ===
+                      "NATIONAL"
+                      ? "🔴 Libur Nasional"
+                      : "🟠 Cuti Bersama"}
+                  </p>
+
+                  <p className="mt-2 font-black text-slate-900">
+                    {selectedHoliday.holiday_name}
+                  </p>
+
+                  {selectedHoliday.holiday_type ===
+                    "COLLECTIVE_LEAVE" && (
+                    <p className="mt-1 text-xs text-slate-600">
+                      Status kerja tetap mengikuti kebijakan PT.DREAMWEAR.
+                    </p>
+                  )}
+
+                  {selectedSchedule?.is_workday && (
+                    <p className="mt-2 rounded-lg bg-white px-3 py-2 text-xs font-black text-blue-700">
+                      Override perusahaan: HARI KERJA
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div
                 className={[
                   "mt-5 rounded-xl border-2 p-4",
@@ -1499,7 +1857,160 @@ export default function CalendarMonitoringPage() {
               </div>
 
 
-              {selectedSchedule &&
+              
+              <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-4">
+
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-600">
+                    Admin Override
+                  </p>
+
+                  <h3 className="mt-1 font-black text-slate-900">
+                    Status Operasional PT.DREAMWEAR
+                  </h3>
+
+                  <p className="mt-1 text-xs text-slate-600">
+                    Status ini menjadi acuan kewajiban PIC dan kepatuhan.
+                  </p>
+                </div>
+
+
+                {selectedHoliday && (
+                  <div
+                    className={[
+                      "mt-3 rounded-xl border px-3 py-2 text-xs font-black",
+                      selectedHoliday.holiday_type ===
+                        "NATIONAL"
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-amber-200 bg-amber-50 text-amber-700",
+                    ].join(" ")}
+                  >
+                    {selectedHoliday.holiday_type ===
+                    "NATIONAL"
+                      ? "🔴 LIBUR NASIONAL"
+                      : "🟠 CUTI BERSAMA"}
+
+                    <div className="mt-1 font-semibold">
+                      {selectedHoliday.holiday_name}
+                    </div>
+                  </div>
+                )}
+
+
+                <div className="mt-4 grid grid-cols-2 gap-3">
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOverrideWorkday(true);
+                      setOverrideError("");
+
+                      if (
+                        !overrideNote.trim() ||
+                        overrideNote.startsWith(
+                          "Libur",
+                        )
+                      ) {
+                        setOverrideNote(
+                          "Hari Kerja",
+                        );
+                      }
+                    }}
+                    className={[
+                      "rounded-xl border-2 px-3 py-4 text-sm font-black",
+                      overrideWorkday === true
+                        ? "border-blue-600 bg-blue-600 text-white"
+                        : "border-slate-200 bg-white text-slate-700",
+                    ].join(" ")}
+                  >
+                    ✓ HARI KERJA
+                  </button>
+
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOverrideWorkday(false);
+                      setOverrideError("");
+
+                      if (
+                        !overrideNote.trim() ||
+                        overrideNote ===
+                          "Hari Kerja"
+                      ) {
+                        setOverrideNote(
+                          selectedHoliday
+                            ? `Libur - ${selectedHoliday.holiday_name}`
+                            : "Libur Perusahaan",
+                        );
+                      }
+                    }}
+                    className={[
+                      "rounded-xl border-2 px-3 py-4 text-sm font-black",
+                      overrideWorkday === false
+                        ? "border-red-500 bg-red-500 text-white"
+                        : "border-slate-200 bg-white text-slate-700",
+                    ].join(" ")}
+                  >
+                    ○ LIBUR
+                  </button>
+
+                </div>
+
+
+                <div className="mt-4">
+
+                  <label className="text-xs font-black uppercase tracking-wider text-slate-600">
+                    Keterangan
+                  </label>
+
+                  <textarea
+                    value={overrideNote}
+                    onChange={(event) =>
+                      setOverrideNote(
+                        event.target.value,
+                      )
+                    }
+                    rows={2}
+                    placeholder="Contoh: Libur khusus perusahaan"
+                    className="mt-2 w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-900 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  />
+                </div>
+
+
+                {overrideMessage && (
+                  <div className="mt-3 rounded-xl border border-blue-200 bg-white p-3 text-sm font-bold text-blue-700">
+                    {overrideMessage}
+                  </div>
+                )}
+
+
+                {overrideError && (
+                  <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-600">
+                    ⚠ {overrideError}
+                  </div>
+                )}
+
+
+                <button
+                  type="button"
+                  disabled={
+                    savingOverride ||
+                    overrideWorkday === null
+                  }
+                  onClick={() =>
+                    void saveScheduleOverride()
+                  }
+                  className="mt-4 w-full rounded-xl bg-slate-900 px-5 py-3.5 text-sm font-black text-white disabled:opacity-40"
+                >
+                  {savingOverride
+                    ? "Menyimpan..."
+                    : "Simpan Perubahan Jadwal"}
+                </button>
+
+              </div>
+
+{selectedSchedule &&
               !selectedSchedule.is_workday ? (
                 <div className="mt-4 rounded-2xl bg-slate-100 p-6 text-center">
 

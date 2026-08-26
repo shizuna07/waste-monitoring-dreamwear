@@ -1,5 +1,7 @@
 "use client";
 
+import RealtimeWorkClock from "@/components/RealtimeWorkClock";
+
 import DashboardWasteCharts from "@/components/DashboardWasteCharts";
 
 import Link from "next/link";
@@ -453,7 +455,9 @@ export default function Home() {
         {!loading &&
           !errorMessage && (
             <>
-              <section className="mt-6">
+              <RealtimeWorkClock />
+
+        <section className="mt-6">
 
           <div className="mb-4">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600">

@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { useAuth } from "@/components/AuthGate";
+import { useTodayWorkStatus } from "@/components/useTodayWorkStatus";
 import { supabase } from "@/lib/supabase";
 
 type TodayRecord = {
@@ -68,6 +69,24 @@ function formatTime(
 }
 
 export default function PicPage() {
+
+  const {
+    loading:
+      workStatusLoading,
+
+    isWorkday,
+
+    statusLabel:
+      workStatusLabel,
+
+    note:
+      workStatusNote,
+
+    holiday:
+      todayHoliday,
+  } =
+    useTodayWorkStatus();
+
   const {
     profile,
   } = useAuth();
@@ -136,7 +155,8 @@ export default function PicPage() {
       focus,
     );
 
-    return () => {
+
+  return () => {
       window.clearInterval(
         timer,
       );
@@ -147,6 +167,66 @@ export default function PicPage() {
       );
     };
   }, [loadToday]);
+
+  if (workStatusLoading) {
+      return (
+        <main className="min-h-screen bg-slate-100 p-6">
+          <div className="mx-auto max-w-3xl rounded-2xl bg-white p-8 text-center shadow-sm">
+            <p className="font-black text-slate-700">
+              Memeriksa jadwal kerja...
+            </p>
+          </div>
+        </main>
+      );
+    }
+  
+    if (!isWorkday) {
+      return (
+        <main className="min-h-screen bg-slate-100 px-4 py-8">
+          <div className="mx-auto max-w-3xl">
+  
+            <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+  
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-3xl">
+                ○
+              </div>
+  
+              <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                Status Hari Ini
+              </p>
+  
+              <h1 className="mt-2 text-3xl font-black text-slate-900">
+                {workStatusLabel}
+              </h1>
+  
+              {todayHoliday && (
+                <p className="mt-3 font-bold text-red-600">
+                  🔴 {todayHoliday.holiday_name}
+                </p>
+              )}
+  
+              {workStatusNote && (
+                <p className="mt-2 text-sm text-slate-500">
+                  {workStatusNote}
+                </p>
+              )}
+  
+              <div className="mt-6 rounded-2xl bg-blue-50 p-5">
+                <p className="font-black text-blue-700">
+                  Tidak Ada Tugas PIC Hari Ini
+                </p>
+  
+                <p className="mt-1 text-sm text-slate-600">
+                  Input limbah dan bukti kebersihan tidak diwajibkan pada hari libur.
+                </p>
+              </div>
+  
+            </div>
+          </div>
+        </main>
+      );
+    }
+
 
   const wasteDone =
     Boolean(record);
