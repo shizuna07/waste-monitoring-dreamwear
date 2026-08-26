@@ -500,7 +500,7 @@ await supabase.storage
 
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 sm:p-8">
+    <main className="cleanliness-premium-page min-h-screen bg-slate-100 px-4 py-6 sm:p-8">
       <div className="mx-auto max-w-3xl">
         <p className="text-xs font-black uppercase tracking-wider text-blue-600">
           PT.DREAMWEAR
@@ -626,7 +626,7 @@ await supabase.storage
             )}
 
             {errorMessage && (
-              <div className="mt-5 rounded-xl bg-red-50 p-4 font-bold text-red-600">
+              <div className="cleanliness-premium-error mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 font-bold text-red-600">
                 {
                   errorMessage
                 }
@@ -642,7 +642,7 @@ await supabase.storage
                 saving ||
                 !photo
               }
-              className="mt-5 w-full rounded-2xl bg-blue-600 px-6 py-4 text-lg font-black text-white disabled:opacity-40"
+              className="cleanliness-premium-submit mt-5 w-full rounded-2xl bg-blue-600 px-6 py-4 text-base font-black text-white disabled:opacity-40"
             >
               {saving
                 ? "Mengirim..."

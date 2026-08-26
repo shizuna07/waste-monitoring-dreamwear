@@ -210,3 +210,725 @@ body {
   background: #334155;
   border-radius: 999px;
 }
+
+/* =========================================================
+   INPUT LIMBAH PREMIUM V1
+   ========================================================= */
+
+.input-premium-page {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.05),
+      transparent 28rem
+    ),
+    #f4f7fb;
+}
+
+.input-premium-page > div {
+  width: 100%;
+}
+
+.input-premium-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding: 24px 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+.input-premium-eyebrow {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: #2563eb;
+}
+
+.input-premium-title {
+  margin-top: 10px;
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  color: #0f172a;
+}
+
+.input-premium-subtitle {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.input-premium-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 9px 13px;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  background: #f0fdf4;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #15803d;
+}
+
+.input-premium-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+}
+
+
+/* FORM UTAMA */
+
+.input-premium-page form {
+  border: 1px solid #e2e8f0;
+  border-radius: 26px;
+  background: #ffffff;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+
+/* SECTION DI DALAM FORM */
+
+.input-premium-page form > section {
+  padding: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.input-premium-page form > section:last-of-type {
+  border-bottom: 0;
+}
+
+
+/* INPUT UMUM */
+
+.input-premium-page input[type="date"],
+.input-premium-page select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  padding: 0 14px;
+  font-weight: 700;
+  color: #0f172a;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.input-premium-page input[type="date"]:focus,
+.input-premium-page select:focus {
+  border-color: #60a5fa;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.10);
+}
+
+
+/* NUMBER KG */
+
+.input-premium-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.input-premium-number::placeholder {
+  color: #cbd5e1;
+}
+
+
+/* AREA INPUT KATEGORI */
+
+.input-premium-page form section .grid > div {
+  position: relative;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 16px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.input-premium-page form section .grid > div:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
+}
+
+
+/* TOTAL - bikin elemen total yang sudah ada lebih menonjol */
+
+.input-premium-page form .bg-slate-900 {
+  border-radius: 20px;
+  background: #0b1730;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.13);
+}
+
+
+/* SUCCESS & ERROR */
+
+.input-premium-page .bg-blue-50 {
+  border-radius: 16px;
+}
+
+.input-premium-page .bg-red-50 {
+  border-radius: 16px;
+}
+
+
+/* SUBMIT */
+
+.input-premium-submit {
+  margin-top: 4px;
+  min-height: 56px;
+  letter-spacing: 0.01em;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 640px) {
+  .input-premium-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .input-premium-title {
+    font-size: 24px;
+  }
+
+  .input-premium-page form {
+    border-radius: 20px;
+  }
+
+  .input-premium-page form > section {
+    padding: 18px;
+  }
+}
+
+
+/* DARK MODE */
+
+.dark .input-premium-page {
+  background: #07111f;
+}
+
+.dark .input-premium-hero,
+.dark .input-premium-page form,
+.dark .input-premium-page form section .grid > div {
+  border-color: #253249;
+  background: #0f1c30;
+}
+
+.dark .input-premium-title,
+.dark .input-premium-number {
+  color: #f8fafc;
+}
+
+.dark .input-premium-subtitle {
+  color: #94a3b8;
+}
+
+.dark .input-premium-page input[type="date"],
+.dark .input-premium-page select,
+.dark .input-premium-page textarea,
+.dark .input-premium-number {
+  border-color: #334155;
+  background: #111f34;
+  color: #f8fafc;
+}
+
+
+/* Input Limbah - final polish */
+.input-premium-hero {
+  display: none;
+}
+
+.input-premium-page form {
+  margin-top: 20px;
+}
+
+.input-premium-page form > section {
+  padding: 22px;
+}
+
+/* Input KG lebih tegas */
+.input-premium-number {
+  min-height: 64px;
+  font-size: 26px;
+}
+
+/* Mobile tetap nyaman */
+@media (max-width: 640px) {
+  .input-premium-page form {
+    margin-top: 16px;
+  }
+
+  .input-premium-number {
+    min-height: 58px;
+    font-size: 22px;
+  }
+}
+
+/* =========================================================
+   INPUT LIMBAH PREMIUM - FINAL POLISH
+   ========================================================= */
+
+/* TOTAL KG */
+.input-premium-page form .bg-slate-900 {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 24px !important;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 22px !important;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(59,130,246,.22),
+      transparent 120px
+    ),
+    #0b1730 !important;
+  box-shadow:
+    0 16px 35px rgba(15,23,42,.16) !important;
+}
+
+.input-premium-page form .bg-slate-900::before {
+  content: "TOTAL LIMBAH HARI INI";
+  display: block;
+  margin-bottom: 7px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  color: #93c5fd;
+}
+
+.input-premium-page form .bg-slate-900::after {
+  content: "KG";
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 7px 10px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  color: #bfdbfe;
+}
+
+
+/* CATATAN */
+.input-premium-page textarea {
+  min-height: 110px;
+}
+
+.input-premium-page textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+/* SUCCESS */
+.input-premium-page form .border-blue-200.bg-blue-50 {
+  border-color: #bbf7d0 !important;
+  background: #f0fdf4 !important;
+  color: #15803d !important;
+}
+
+
+/* ERROR */
+.input-premium-page form .border-red-200.bg-red-50 {
+  border-color: #fecaca !important;
+  background: #fef2f2 !important;
+}
+
+
+/* TOMBOL SIMPAN */
+.input-premium-submit {
+  position: sticky;
+  bottom: 16px;
+  z-index: 20;
+  min-height: 58px;
+  margin-top: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: #2563eb !important;
+  box-shadow:
+    0 12px 30px rgba(37,99,235,.28) !important;
+}
+
+.input-premium-submit:hover {
+  background: #1d4ed8 !important;
+}
+
+.input-premium-submit::before {
+  content: "✓";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 9px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.14);
+}
+
+
+/* BERI RUANG BAWAH FORM */
+.input-premium-page form {
+  padding-bottom: 8px;
+}
+
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .input-premium-page form .bg-slate-900 {
+    padding: 20px !important;
+  }
+
+  .input-premium-page form .bg-slate-900::after {
+    right: 18px;
+  }
+
+  .input-premium-submit {
+    bottom: 74px;
+    min-height: 56px;
+    border-radius: 18px !important;
+  }
+}
+
+
+/* DARK MODE */
+.dark .input-premium-page form .bg-slate-900 {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(59,130,246,.18),
+      transparent 120px
+    ),
+    #020b1c !important;
+}
+
+.dark .input-premium-page form .border-blue-200.bg-blue-50 {
+  border-color: #14532d !important;
+  background: rgba(20,83,45,.25) !important;
+  color: #86efac !important;
+}
+
+
+/* FIX Input Limbah - tombol jangan menutupi field */
+.input-premium-submit {
+  position: static !important;
+  bottom: auto !important;
+  margin-top: 18px !important;
+}
+
+@media (max-width: 640px) {
+  .input-premium-submit {
+    position: static !important;
+    bottom: auto !important;
+  }
+}
+
+
+/* =========================================================
+   KEBERSIHAN PREMIUM V1
+   ========================================================= */
+
+.cleanliness-premium-page {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(16, 185, 129, .055),
+      transparent 30rem
+    ),
+    #f4f7fb;
+}
+
+
+/* container utama */
+.cleanliness-premium-page > div {
+  width: 100%;
+}
+
+
+/* Card putih utama yang ada di halaman */
+.cleanliness-premium-page section,
+.cleanliness-premium-page > div > div {
+  border-color: #e2e8f0;
+}
+
+
+/* Judul halaman */
+.cleanliness-premium-page h1 {
+  letter-spacing: -0.035em;
+  color: #0f172a;
+}
+
+
+/* ==========================================
+   AREA UPLOAD / CAMERA
+   ========================================== */
+
+.cleanliness-premium-page input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* Tombol/label Ambil Foto */
+.cleanliness-premium-page label:has(input[type="file"]),
+.cleanliness-premium-page input[type="file"] + *,
+.cleanliness-premium-page button:not(.cleanliness-premium-submit) {
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease;
+}
+
+
+/* Preview image */
+.cleanliness-premium-page img {
+  max-width: 100%;
+}
+
+.cleanliness-premium-page img[src^="blob:"],
+.cleanliness-premium-page img[src^="data:"] {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  border-radius: 22px;
+  background: #0f172a;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, .14);
+}
+
+
+/* Card area yang mengandung input file */
+.cleanliness-premium-page div:has(> input[type="file"]) {
+  position: relative;
+  overflow: hidden;
+  border: 2px dashed #bfdbfe;
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(239, 246, 255, .8),
+      rgba(255, 255, 255, 1)
+    );
+  padding: 26px;
+}
+
+
+/* ==========================================
+   BUTTON AMBIL FOTO
+   ========================================== */
+
+.cleanliness-premium-page button[type="button"]:not(.cleanliness-premium-submit) {
+  border-radius: 16px;
+}
+
+
+/* ==========================================
+   SUBMIT BUTTON
+   ========================================== */
+
+.cleanliness-premium-submit {
+  min-height: 58px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: #059669 !important;
+  box-shadow:
+    0 14px 30px rgba(5, 150, 105, .25);
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+.cleanliness-premium-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #047857 !important;
+  box-shadow:
+    0 18px 35px rgba(5, 150, 105, .28);
+}
+
+.cleanliness-premium-submit::before {
+  content: "✓";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 9px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.14);
+}
+
+
+/* ERROR */
+.cleanliness-premium-error {
+  box-shadow: none;
+}
+
+
+/* ==========================================
+   EXISTING PHOTO / STATUS
+   ========================================== */
+
+.cleanliness-premium-page .bg-green-50,
+.cleanliness-premium-page .bg-emerald-50 {
+  border: 1px solid #bbf7d0;
+  border-radius: 18px;
+}
+
+.cleanliness-premium-page .bg-blue-50 {
+  border-radius: 18px;
+}
+
+
+/* ==========================================
+   IMAGE FRAME
+   ========================================== */
+
+.cleanliness-premium-page figure,
+.cleanliness-premium-page .overflow-hidden:has(img) {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow:
+    0 12px 34px rgba(15, 23, 42, .07);
+}
+
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 640px) {
+
+  .cleanliness-premium-page div:has(> input[type="file"]) {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .cleanliness-premium-submit {
+    min-height: 56px;
+    border-radius: 18px !important;
+  }
+
+  .cleanliness-premium-page img[src^="blob:"],
+  .cleanliness-premium-page img[src^="data:"] {
+    max-height: 420px;
+    border-radius: 18px;
+  }
+}
+
+
+/* ==========================================
+   DARK MODE
+   ========================================== */
+
+.dark .cleanliness-premium-page {
+  background: #07111f;
+}
+
+.dark .cleanliness-premium-page div:has(> input[type="file"]) {
+  border-color: #1e40af;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(30, 58, 138, .18),
+      rgba(15, 28, 48, 1)
+    );
+}
+
+.dark .cleanliness-premium-page h1 {
+  color: #f8fafc;
+}
+
+
+/* =========================================================
+   KEBERSIHAN PREMIUM - PREVIEW FINAL
+   ========================================================= */
+
+/* Preview foto */
+.cleanliness-premium-page div:has(> img) {
+  position: relative;
+}
+
+/* Status siap kirim */
+.cleanliness-premium-page div:has(> img)::before {
+  content: "✓  FOTO SIAP DIKIRIM";
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  background: #f0fdf4;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  color: #15803d;
+}
+
+/* Informasi watermark */
+.cleanliness-premium-page div:has(> img)::after {
+  content: "Watermark PT.DREAMWEAR, waktu dan PIC diterapkan otomatis saat bukti dikirim.";
+  display: block;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  background: #eff6ff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #1d4ed8;
+}
+
+/* Tombol kirim aktif lebih tegas */
+.cleanliness-premium-submit:not(:disabled) {
+  background: #059669 !important;
+  color: white !important;
+  box-shadow:
+    0 15px 35px rgba(5, 150, 105, .28) !important;
+}
+
+.cleanliness-premium-submit:disabled {
+  background: #a7f3d0 !important;
+  color: rgba(255,255,255,.9) !important;
+  box-shadow: none !important;
+}
+
+/* Dark mode */
+.dark .cleanliness-premium-page div:has(> img)::before {
+  border-color: #166534;
+  background: rgba(22,101,52,.22);
+  color: #86efac;
+}
+
+.dark .cleanliness-premium-page div:has(> img)::after {
+  border-color: #1e3a8a;
+  background: rgba(30,58,138,.2);
+  color: #93c5fd;
+}

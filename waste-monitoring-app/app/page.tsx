@@ -1,8 +1,11 @@
 "use client";
 
+import ThemeToggle from "@/components/ThemeToggle";
 import RealtimeWorkClock from "@/components/RealtimeWorkClock";
 
 import DashboardWasteCharts from "@/components/DashboardWasteCharts";
+import PremiumDashboardOverview from "@/components/PremiumDashboardOverview";
+import PremiumDashboardFeed from "@/components/PremiumDashboardFeed";
 
 import Link from "next/link";
 import {
@@ -396,46 +399,122 @@ export default function Home() {
     },
   ];
 
+
+  const premiumCuttingToday =
+    todayRecords.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.cutting_kg ?? 0,
+        ),
+      0,
+    );
+
+  const premiumWetToday =
+    todayRecords.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.wet_waste_kg ?? 0,
+        ),
+      0,
+    );
+
+  const premiumOtherToday =
+    todayRecords.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.plastic_kg ?? 0,
+        ) +
+        Number(
+          item.paper_kg ?? 0,
+        ) +
+        Number(
+          item.carton_kg ?? 0,
+        ) +
+        Number(
+          item.pedding_kg ?? 0,
+        ),
+      0,
+    );
+
+  const premiumPercent = (
+    value: number,
+  ) => {
+    if (totalToday <= 0) {
+      return 0;
+    }
+
+    return Math.min(
+      100,
+      Math.max(
+        0,
+        (value / totalToday) *
+          100,
+      ),
+    );
+  };
+
   return (
     <main className="min-h-screen bg-slate-100">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-8">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">
-              PT.DREAMWEAR
-            </p>
+      <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/95 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
 
-            <h1 className="mt-1 text-2xl font-black text-slate-900 sm:text-3xl">
-              Waste Monitoring
-            </h1>
+          <div className="min-w-0">
 
-            <p className="mt-1 text-sm text-slate-500">
-              Monitoring dan pencatatan limbah harian
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-blue-700 ring-1 ring-blue-100">
+                PT.DREAMWEAR
+              </span>
+
+              <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-emerald-700 ring-1 ring-emerald-100">
+                <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+                Live Monitoring
+              </span>
+            </div>
+
+            <div className="mt-3">
+              <h1 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                Waste Monitoring
+              </h1>
+
+              <p className="mt-1 max-w-xl text-sm font-medium text-slate-500">
+                Monitoring, pencatatan, dan kontrol limbah harian PT.DREAMWEAR.
+              </p>
+            </div>
+
           </div>
 
-          <div className="flex flex-wrap gap-2">
+
+          <div className="flex flex-wrap items-center gap-2">
+
+            <ThemeToggle inline />
+
             <Link
               href="/rekap"
-              className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
             >
               Rekap
             </Link>
 
             <Link
               href="/riwayat"
-              className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 shadow-sm transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
             >
               Riwayat
             </Link>
 
             <Link
               href="/input-limbah"
-              className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-blue-700"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-black text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 hover:-translate-y-0.5"
             >
-              + Input Limbah
+              <span className="text-lg leading-none">+</span>
+              Input Limbah
             </Link>
+
           </div>
+
         </div>
       </header>
 
@@ -459,216 +538,287 @@ export default function Home() {
 
         <section className="mt-6">
 
-          <div className="mb-4">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-600">
-              Ringkasan Hari Ini
-            </p>
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
 
-            <h2 className="mt-1 text-xl font-black text-slate-900">
-              Limbah Hari Ini
-            </h2>
-          </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+                  Ringkasan Hari Ini
+                </p>
 
+                <h2 className="mt-1 text-xl font-black tracking-tight text-slate-950">
+                  Limbah Hari Ini
+                </h2>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-
-            {/* CUTTING */}
-
-            <div className="rounded-2xl bg-blue-600 p-5 text-white shadow-sm">
-
-              <div className="flex items-start justify-between">
-
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider text-blue-100">
-                    Limbah Cutting
-                  </p>
-
-                  <p className="mt-3 text-3xl font-black">
-                    {todayRecords
-                      .reduce(
-                        (total, item) =>
-                          total +
-                          Number(
-                            item.cutting_kg ??
-                              0,
-                          ),
-                        0,
-                      )
-                      .toLocaleString(
-                        "id-ID",
-                        {
-                          maximumFractionDigits:
-                            2,
-                        },
-                      )}
-                    <span className="ml-2 text-sm font-black text-blue-100">
-                      KG
-                    </span>
-                  </p>
-
-                  <p className="mt-2 text-xs text-blue-100">
-                    Bahan Cutting • Hari ini
-                  </p>
-                </div>
-
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl">
-                  ✂
-                </div>
+                <p className="mt-1 text-xs font-medium text-slate-500">
+                  Distribusi limbah berdasarkan kategori hari ini.
+                </p>
               </div>
+
+              <div className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-500 shadow-sm">
+                Live Data
+              </div>
+
             </div>
 
 
-            {/* BASAH */}
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-            <div className="rounded-2xl bg-cyan-600 p-5 text-white shadow-sm">
+              {/* CUTTING */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
 
-              <div className="flex items-start justify-between">
+                <div className="absolute inset-x-0 top-0 h-1 bg-blue-600"></div>
 
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider text-cyan-100">
-                    Limbah Basah / Umum
-                  </p>
+                <div className="flex items-start justify-between gap-4">
 
-                  <p className="mt-3 text-3xl font-black">
-                    {todayRecords
-                      .reduce(
-                        (total, item) =>
-                          total +
-                          Number(
-                            item.wet_waste_kg ??
-                              0,
-                          ),
-                        0,
-                      )
-                      .toLocaleString(
-                        "id-ID",
-                        {
-                          maximumFractionDigits:
-                            2,
-                        },
-                      )}
-                    <span className="ml-2 text-sm font-black text-cyan-100">
-                      KG
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                      Limbah Cutting
+                    </p>
+
+                    <div className="mt-3 flex items-end gap-2">
+                      <p className="text-3xl font-black tracking-tight text-slate-950">
+                        {premiumCuttingToday.toLocaleString(
+                          "id-ID",
+                          {
+                            maximumFractionDigits: 2,
+                          },
+                        )}
+                      </p>
+
+                      <span className="pb-1 text-xs font-black text-slate-400">
+                        KG
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-lg font-black text-blue-600 ring-1 ring-blue-100">
+                    ✂
+                  </div>
+
+                </div>
+
+                <div className="mt-5">
+                  <div className="flex items-center justify-between text-[10px] font-bold">
+                    <span className="text-slate-400">
+                      Kontribusi
                     </span>
-                  </p>
 
-                  <p className="mt-2 text-xs text-cyan-100">
-                    Limbah Basah / Umum • Hari ini
-                  </p>
+                    <span className="text-blue-600">
+                      {premiumPercent(
+                        premiumCuttingToday,
+                      ).toFixed(1)}%
+                    </span>
+                  </div>
+
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className="h-full rounded-full bg-blue-600 transition-all"
+                      style={{
+                        width: `${premiumPercent(
+                          premiumCuttingToday,
+                        )}%`,
+                      }}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl">
-                  ◉
-                </div>
+                <p className="mt-3 text-[11px] font-medium text-slate-400">
+                  Bahan Cutting • Hari ini
+                </p>
+
               </div>
+
+
+              {/* BASAH */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+
+                <div className="absolute inset-x-0 top-0 h-1 bg-cyan-500"></div>
+
+                <div className="flex items-start justify-between gap-4">
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                      Limbah Basah / Umum
+                    </p>
+
+                    <div className="mt-3 flex items-end gap-2">
+                      <p className="text-3xl font-black tracking-tight text-slate-950">
+                        {premiumWetToday.toLocaleString(
+                          "id-ID",
+                          {
+                            maximumFractionDigits: 2,
+                          },
+                        )}
+                      </p>
+
+                      <span className="pb-1 text-xs font-black text-slate-400">
+                        KG
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-lg font-black text-cyan-600 ring-1 ring-cyan-100">
+                    ◉
+                  </div>
+
+                </div>
+
+                <div className="mt-5">
+                  <div className="flex items-center justify-between text-[10px] font-bold">
+                    <span className="text-slate-400">
+                      Kontribusi
+                    </span>
+
+                    <span className="text-cyan-600">
+                      {premiumPercent(
+                        premiumWetToday,
+                      ).toFixed(1)}%
+                    </span>
+                  </div>
+
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className="h-full rounded-full bg-cyan-500 transition-all"
+                      style={{
+                        width: `${premiumPercent(
+                          premiumWetToday,
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <p className="mt-3 text-[11px] font-medium text-slate-400">
+                  Basah / Umum • Hari ini
+                </p>
+
+              </div>
+
+
+              {/* LAINNYA */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
+
+                <div className="absolute inset-x-0 top-0 h-1 bg-violet-500"></div>
+
+                <div className="flex items-start justify-between gap-4">
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                      Limbah Lainnya
+                    </p>
+
+                    <div className="mt-3 flex items-end gap-2">
+                      <p className="text-3xl font-black tracking-tight text-slate-950">
+                        {premiumOtherToday.toLocaleString(
+                          "id-ID",
+                          {
+                            maximumFractionDigits: 2,
+                          },
+                        )}
+                      </p>
+
+                      <span className="pb-1 text-xs font-black text-slate-400">
+                        KG
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-lg font-black text-violet-600 ring-1 ring-violet-100">
+                    ♻
+                  </div>
+
+                </div>
+
+                <div className="mt-5">
+                  <div className="flex items-center justify-between text-[10px] font-bold">
+                    <span className="text-slate-400">
+                      Kontribusi
+                    </span>
+
+                    <span className="text-violet-600">
+                      {premiumPercent(
+                        premiumOtherToday,
+                      ).toFixed(1)}%
+                    </span>
+                  </div>
+
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className="h-full rounded-full bg-violet-500 transition-all"
+                      style={{
+                        width: `${premiumPercent(
+                          premiumOtherToday,
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <p className="mt-3 text-[11px] font-medium leading-relaxed text-slate-400">
+                  Plastik • Paper • Karton • Pedding
+                </p>
+
+              </div>
+
+
+              {/* TOTAL */}
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-800 bg-[#0b1730] p-5 text-white shadow-lg shadow-slate-950/10 transition hover:-translate-y-0.5 hover:shadow-xl">
+
+                <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-blue-500/10"></div>
+
+                <div className="relative flex items-start justify-between gap-4">
+
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-blue-200/70">
+                      Total Hari Ini
+                    </p>
+
+                    <div className="mt-3 flex items-end gap-2">
+                      <p className="text-3xl font-black tracking-tight">
+                        {totalToday.toLocaleString(
+                          "id-ID",
+                          {
+                            maximumFractionDigits: 2,
+                          },
+                        )}
+                      </p>
+
+                      <span className="pb-1 text-xs font-black text-blue-200/60">
+                        KG
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-xl font-black ring-1 ring-white/10">
+                    ∑
+                  </div>
+
+                </div>
+
+                <div className="relative mt-5 rounded-xl border border-white/10 bg-white/[0.06] px-3 py-3">
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-blue-100/60">
+                      Status pencatatan
+                    </span>
+
+                    <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-300">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                      LIVE
+                    </span>
+                  </div>
+
+                  <p className="mt-2 text-xs font-semibold text-white/80">
+                    Akumulasi seluruh jenis limbah hari ini.
+                  </p>
+
+                </div>
+
+              </div>
+
             </div>
 
-
-            {/* LIMBAH LAINNYA */}
-
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-
-              <div className="flex items-start justify-between">
-
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider text-slate-500">
-                    Limbah Lainnya
-                  </p>
-
-                  <p className="mt-3 text-3xl font-black text-slate-900">
-                    {todayRecords
-                      .reduce(
-                        (total, item) =>
-                          total +
-                          Number(
-                            item.plastic_kg ??
-                              0,
-                          ) +
-                          Number(
-                            item.paper_kg ??
-                              0,
-                          ) +
-                          Number(
-                            item.carton_kg ??
-                              0,
-                          ) +
-                          Number(
-                            item.pedding_kg ??
-                              0,
-                          ),
-                        0,
-                      )
-                      .toLocaleString(
-                        "id-ID",
-                        {
-                          maximumFractionDigits:
-                            2,
-                        },
-                      )}
-                    <span className="ml-2 text-sm font-black text-slate-400">
-                      KG
-                    </span>
-                  </p>
-
-                  <p className="mt-2 text-xs text-slate-500">
-                    Plastik + Paper + Karton + Pedding
-                  </p>
-                </div>
-
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-xl">
-                  ♻
-                </div>
-              </div>
-            </div>
-
-
-            {/* TOTAL */}
-
-            <div className="rounded-2xl bg-slate-900 p-5 text-white shadow-sm">
-
-              <div className="flex items-start justify-between">
-
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider text-slate-300">
-                    Total Hari Ini
-                  </p>
-
-                  <p className="mt-3 text-3xl font-black">
-                    {todayRecords
-                      .reduce(
-                        (total, item) =>
-                          total +
-                          Number(
-                            item.total_kg ??
-                              0,
-                          ),
-                        0,
-                      )
-                      .toLocaleString(
-                        "id-ID",
-                        {
-                          maximumFractionDigits:
-                            2,
-                        },
-                      )}
-                    <span className="ml-2 text-sm font-black text-slate-300">
-                      KG
-                    </span>
-                  </p>
-
-                  <p className="mt-2 text-xs text-slate-400">
-                    Seluruh jenis limbah hari ini
-                  </p>
-                </div>
-
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-xl">
-                  ∑
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
+          </section>
 
               <TodayCleanlinessStatus />
 
@@ -780,7 +930,9 @@ export default function Home() {
         </section>
 
 
-              <DashboardWasteCharts />
+              <PremiumDashboardOverview />
+
+            <PremiumDashboardFeed />
 
         <AdminDailyMonitoring />
 

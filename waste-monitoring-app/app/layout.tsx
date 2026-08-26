@@ -8,7 +8,6 @@ import "./globals.css";
 import AuthGate from "@/components/AuthGate";
 import AppNavigation from "@/components/AppNavigation";
 import PWARegister from "@/components/PWARegister";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const basePath =
   process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -82,11 +81,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className="bg-slate-100 text-slate-900 antialiased">
+      <body className="bg-[#f4f7fb] text-slate-900 antialiased">
 
         <PWARegister />
 
-        <ThemeToggle />
 
 
         <AuthGate>

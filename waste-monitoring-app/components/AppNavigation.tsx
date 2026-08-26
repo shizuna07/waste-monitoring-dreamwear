@@ -254,10 +254,10 @@ export default function AppNavigation() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
-        <div className="border-b border-slate-200 p-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-20 items-center justify-center overflow-hidden rounded-xl bg-white p-1 ring-1 ring-slate-200">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-white/10 bg-[#071b3f] shadow-[12px_0_35px_rgba(15,23,42,0.18)] md:flex">
+        <div className="border-b border-white/10 px-4 py-5">
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3">
+            <div className="flex h-14 w-20 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg shadow-black/20 ring-1 ring-white/20">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={logoSrc}
@@ -267,31 +267,31 @@ export default function AppNavigation() {
             </div>
 
             <div>
-              <p className="text-sm font-black text-slate-900">
+              <p className="text-sm font-black text-white">
                 PT.DREAMWEAR
               </p>
 
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-blue-200/60">
                 Waste Monitoring
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mx-4 mt-4 rounded-xl bg-blue-50 p-3">
-          <p className="text-xs font-semibold text-blue-600">
+        <div className="mx-3 mt-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4 shadow-inner shadow-black/10">
+          <p className="text-xs font-semibold text-blue-300">
             {profile.role ===
             "ADMIN"
               ? "ADMIN / MONITORING"
               : "PIC"}
           </p>
 
-          <p className="mt-1 font-black text-slate-900">
+          <p className="mt-1 font-black text-white">
             {profile.name}
           </p>
         </div>
 
-        <nav className="flex-1 space-y-2 overflow-y-auto p-4">
+        <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-5">
           {menus.map(
             (item) => {
               const active =
@@ -314,13 +314,13 @@ export default function AppNavigation() {
                     item.href
                   }
                   className={[
-                    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition",
+                    "group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold transition-all duration-200",
                     active
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-600 hover:bg-blue-50 hover:text-blue-700",
+                      ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-950/30 ring-1 ring-white/10"
+                      : "text-blue-100/70 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-blue-100 transition group-hover:bg-white/15 group-hover:text-white">
                     {
                       item.icon
                     }
@@ -343,13 +343,13 @@ export default function AppNavigation() {
           )}
         </nav>
 
-        <div className="border-t border-slate-200 p-4">
+        <div className="border-t border-white/10 p-4">
           <button
             type="button"
             onClick={() =>
               void logout()
             }
-            className="w-full rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-red-50 hover:text-red-600"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-blue-100 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-200"
           >
             Keluar
           </button>

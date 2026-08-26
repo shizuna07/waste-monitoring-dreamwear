@@ -369,7 +369,7 @@ export default function InputWastePage() {
     workLockLoading
   ) {
     return (
-      <main className="min-h-screen bg-slate-100 px-4 py-8">
+      <main className="input-premium-page min-h-screen bg-slate-100 px-4 py-8">
         <div className="mx-auto max-w-2xl rounded-3xl bg-white p-8 text-center shadow-sm">
 
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl">
@@ -515,14 +515,37 @@ export default function InputWastePage() {
           </div>
         )}
 
-        <form
+        
+        {/* INPUT LIMBAH HARIAN PREMIUM */}
+        <section className="input-premium-hero">
+          <div>
+            <div className="input-premium-eyebrow">
+              DAILY WASTE ENTRY
+            </div>
+
+            <h1 className="input-premium-title">
+              Input Limbah Harian
+            </h1>
+
+            <p className="input-premium-subtitle">
+              Catat jumlah limbah harian secara akurat sesuai kategori.
+            </p>
+          </div>
+
+          <div className="input-premium-status">
+            <span className="input-premium-status-dot"></span>
+            PENCATATAN AKTIF
+          </div>
+        </section>
+
+<form
           onSubmit={
             handleSubmit
           }
           className="mt-6 space-y-5"
         >
           <section className="rounded-2xl bg-white p-5 shadow-sm">
-            <label className="mb-2 block text-sm font-bold">
+            <label className="mb-2 block text-xs font-black uppercase tracking-[0.12em] text-slate-500">
               Tanggal
             </label>
 
@@ -566,7 +589,7 @@ export default function InputWastePage() {
                       item.label
                     }
                   >
-                    <label className="mb-2 block text-sm font-bold">
+                    <label className="mb-2 block text-xs font-black uppercase tracking-[0.12em] text-slate-500">
                       {
                         item.label
                       }
@@ -591,10 +614,10 @@ export default function InputWastePage() {
                               .value,
                           )
                         }
-                        className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-14 text-lg font-bold"
+                        className="input-premium-number w-full rounded-2xl border border-slate-200 bg-white px-4 py-4 pr-14 text-2xl font-black text-slate-950 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
                       />
 
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-600">
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-black text-slate-500">
                         KG
                       </span>
                     </div>
@@ -604,12 +627,12 @@ export default function InputWastePage() {
             </div>
           </section>
 
-          <section className="rounded-2xl bg-blue-600 p-5 text-white shadow-sm">
-            <p className="text-sm text-blue-100">
-              Total Limbah
+          <section className="relative overflow-hidden rounded-2xl border border-slate-800 bg-[#0b1730] px-6 py-6 text-white shadow-lg shadow-slate-950/10">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-200/70">
+              Total Limbah Hari Ini
             </p>
 
-            <p className="mt-1 text-4xl font-black">
+            <p className="mt-2 text-4xl font-black tracking-tight text-white">
               {total.toLocaleString(
                 "id-ID",
                 {
@@ -617,14 +640,14 @@ export default function InputWastePage() {
                     2,
                 },
               )}{" "}
-              <span className="text-lg">
+              <span className="ml-2 text-sm font-black text-blue-200/70">
                 KG
               </span>
             </p>
           </section>
 
           <section className="rounded-2xl bg-white p-5 shadow-sm">
-            <label className="mb-2 block text-sm font-bold">
+            <label className="mb-2 block text-xs font-black uppercase tracking-[0.12em] text-slate-500">
               PIC
             </label>
 
@@ -674,7 +697,7 @@ export default function InputWastePage() {
               </select>
             )}
 
-            <label className="mb-2 mt-5 block text-sm font-bold">
+            <label className="mb-2 mt-5 block text-xs font-black uppercase tracking-[0.12em] text-slate-500">
               Keterangan
             </label>
 
@@ -692,7 +715,7 @@ export default function InputWastePage() {
               }
               rows={3}
               placeholder="Opsional..."
-              className="w-full resize-none rounded-xl border border-slate-300 px-4 py-3"
+              className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100"
             />
           </section>
 
@@ -713,7 +736,7 @@ export default function InputWastePage() {
             disabled={
               saving
             }
-            className="w-full rounded-2xl bg-slate-900 px-6 py-4 text-lg font-black text-white disabled:opacity-100"
+            className="input-premium-submit w-full rounded-2xl bg-blue-600 px-6 py-4 text-base font-black text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving
               ? "Menyimpan..."
