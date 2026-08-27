@@ -61,6 +61,7 @@ const PIC_ALLOWED_PATHS = [
   "/pic",
   "/input-limbah",
   "/kebersihan",
+  "/chat",
 ];
 
 export default function AuthGate({

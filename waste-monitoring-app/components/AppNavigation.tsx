@@ -11,6 +11,7 @@ import {
 
 import { useAuth } from "@/components/AuthGate";
 import { supabase } from "@/lib/supabase";
+import { useChatUnread } from "@/components/useChatUnread";
 
 const ADMIN_MENUS = [
   {
@@ -33,6 +34,11 @@ const ADMIN_MENUS = [
     href: "/kebersihan",
     icon: "📷",
   },
+      {
+        label: "Chat",
+        href: "/chat",
+        icon: "💬",
+      },
   {
     label: "Kepatuhan",
     href: "/kepatuhan",
@@ -86,6 +92,11 @@ const PIC_MENUS = [
     href: "/kebersihan",
     icon: "📷",
   },
+      {
+        label: "Chat",
+        href: "/chat",
+        icon: "💬",
+      },
 ];
 
 function jakartaNow() {
@@ -143,6 +154,11 @@ export default function AppNavigation() {
     profile,
     logout,
   } = useAuth();
+
+  const {
+    unreadCount: chatUnreadCount,
+  } = useChatUnread();
+
 
   const [
     pending,
@@ -299,6 +315,12 @@ export default function AppNavigation() {
                   item.href,
                 );
 
+                const chatBadge =
+                  item.href === "/chat"
+                    ? chatUnreadCount
+                    : 0;
+
+
               const badge =
                 item.href ===
                   "/kebersihan" &&
@@ -330,6 +352,15 @@ export default function AppNavigation() {
                     {
                       item.label
                     }
+
+                    {chatBadge > 0 && (
+                      <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[9px] font-black text-white shadow-sm">
+                        {chatBadge > 99
+                          ? "99+"
+                          : chatBadge}
+                      </span>
+                    )}
+
                   </span>
 
                   {badge && (
@@ -397,7 +428,7 @@ export default function AppNavigation() {
             profile.role ===
             "ADMIN"
               ? "grid grid-cols-4"
-              : "grid grid-cols-3"
+              : "grid grid-cols-4"
           }
         >
           {menus.map(
@@ -406,6 +437,12 @@ export default function AppNavigation() {
                 isActive(
                   item.href,
                 );
+
+                const chatBadge =
+                  item.href === "/chat"
+                    ? chatUnreadCount
+                    : 0;
+
 
               const badge =
                 item.href ===
@@ -454,6 +491,15 @@ export default function AppNavigation() {
                   {
                     item.label
                   }
+
+                    {chatBadge > 0 && (
+                      <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[9px] font-black text-white shadow-sm">
+                        {chatBadge > 99
+                          ? "99+"
+                          : chatBadge}
+                      </span>
+                    )}
+
                 </Link>
               );
             },

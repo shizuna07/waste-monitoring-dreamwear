@@ -1,5 +1,7 @@
 "use client";
 
+import PicAdminMessageCard from "@/components/PicAdminMessageCard";
+
 import Link from "next/link";
 
 import {
@@ -255,7 +257,9 @@ export default function PicPage() {
         </div>
 
         <div className="mt-6">
-          <h2 className="text-xl font-black text-slate-900">
+          <PicAdminMessageCard />
+
+            <h2 className="text-xl font-black text-slate-900">
             Tugas Hari Ini
           </h2>
 
