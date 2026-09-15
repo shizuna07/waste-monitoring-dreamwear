@@ -1,4 +1,5 @@
 "use client";
+import SafetyPatrolDashboardCard from "@/components/SafetyPatrolDashboardCard";
 
 import ThemeToggle from "@/components/ThemeToggle";
 import RealtimeWorkClock from "@/components/RealtimeWorkClock";
@@ -535,6 +536,7 @@ export default function Home() {
           !errorMessage && (
             <>
               <RealtimeWorkClock />
+              <SafetyPatrolDashboardCard />
 
         <section className="mt-6">
 
